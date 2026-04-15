@@ -1,36 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Embedded Page</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Grand Luxe Hotel</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-body {
-margin: 0;
-font-family: Arial, sans-serif;
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif;}
+body{background:#f6f6f6;color:#222;}
+
+/* NAV */
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 10%;
+background:#111;
+color:#fff;
+position:sticky;
+top:0;
+z-index:10;
+}
+nav h2{font-size:20px;}
+nav ul{display:flex;gap:20px;list-style:none;}
+nav ul li{cursor:pointer;font-size:14px;opacity:0.8;}
+nav ul li:hover{opacity:1;}
+
+/* HERO */
+.hero{
+height:85vh;
+background:url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb') center/cover;
+position:relative;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+.hero::after{
+content:'';
+position:absolute;
+inset:0;
+background:rgba(0,0,0,0.6);
+}
+.hero-content{
+position:relative;
+text-align:center;
+color:#fff;
+max-width:750px;
+padding:20px;
+}
+.hero h1{font-size:52px;}
+.hero p{opacity:0.9;margin:10px 0 20px;}
+
+/* BOOKING BOX */
+.booking{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+background:#fff;
+padding:15px;
+border-radius:12px;
+margin-top:20px;
+}
+.booking input,.booking select{
+padding:10px;
+border:1px solid #ddd;
+border-radius:8px;
+}
+.booking button{
+background:#c59d5f;
+border:none;
+color:#fff;
+border-radius:8px;
+cursor:pointer;
+font-weight:600;
 }
 
-header {
-background: #111;
-color: #fff;
-padding: 15px;
-text-align: center;
+/* ROOMS */
+.section{padding:60px 10%;}
+.section h2{text-align:center;margin-bottom:30px;}
+
+.rooms{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:20px;
 }
 
-iframe {
-width: 100%;
-height: 100vh;
-border: none;
+.card{
+background:#fff;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+.card:hover{transform:translateY(-5px);}
+.card img{width:100%;height:180px;object-fit:cover;}
+.card-body{padding:15px;}
+.price{color:#c59d5f;font-weight:700;margin-top:10px;}
+
+.card button{
+margin-top:10px;
+width:100%;
+padding:10px;
+background:#111;
+color:#fff;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* MODAL */
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+align-items:center;
+justify-content:center;
+}
+.modal-box{
+background:#fff;
+padding:20px;
+border-radius:12px;
+width:90%;
+max-width:400px;
+}
+.modal-box h3{margin-bottom:10px;}
+.modal-box input{
+width:100%;
+padding:10px;
+margin:8px 0;
+border:1px solid #ddd;
+border-radius:8px;
+}
+.modal-box button{
+width:100%;
+padding:10px;
+background:#c59d5f;
+border:none;
+color:#fff;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* FOOTER */
+footer{
+text-align:center;
+padding:25px;
+background:#111;
+color:#aaa;
+}
+
+@media(max-width:768px){
+.hero h1{font-size:34px;}
+.booking{grid-template-columns:1fr;}
+nav ul{display:none;}
 }
 </style>
 </head>
 
 <body>
 
-<header>
-<h2>Preview</h2>
-</header>
+<nav>
+<h2>Grand Luxe</h2>
+<ul>
+<li>Home</li>
+<li>Rooms</li>
+<li>Bookings</li>
+<li>Contact</li>
+</ul>
+</nav>
 
-<iframe src="https://xainhotellatest.bdtask-demo.com/user/roomlist"></iframe>
+<div class="hero">
+  <div class="hero-content">
+    <h1>Luxury That Feels Like Home</h1>
+    <p>Book premium rooms instantly with real-time pricing & availability.</p>
+
+    <div class="booking">
+      <input type="date" id="checkin">
+      <input type="date" id="checkout">
+      <select id="guests">
+        <option value="1">1 Guest</option>
+        <option value="2">2 Guests</option>
+        <option value="3">3 Guests</option>
+      </select>
+      <button onclick="checkAvailability()">Search</button>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+<h2>Available Rooms</h2>
+
+<div class="rooms">
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1566073771259-6a8506099945">
+<div class="card-body">
+<h3>Deluxe Room</h3>
+<p>Comfortable room with modern design.</p>
+<div class="price" data-price="120">$120 / night</div>
+<button onclick="openModal('Deluxe Room',120)">Book Now</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511">
+<div class="card-body">
+<h3>Executive Suite</h3>
+<p>Premium space with luxury experience.</p>
+<div class="price" data-price="220">$220 / night</div>
+<button onclick="openModal('Executive Suite',220)">Book Now</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b">
+<div class="card-body">
+<h3>Presidential Suite</h3>
+<p>Top-tier luxury with full service.</p>
+<div class="price" data-price="450">$450 / night</div>
+<button onclick="openModal('Presidential Suite',450)">Book Now</button>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="modal-box">
+<h3 id="roomName">Book Room</h3>
+
+<input type="text" id="name" placeholder="Full Name">
+<input type="email" id="email" placeholder="Email">
+
+<p id="total"></p>
+
+<button onclick="confirmBooking()">Confirm Booking</button>
+</div>
+</div>
+
+<footer>
+© 2026 Grand Luxe Hotel | Production Prototype
+</footer>
+
+<script>
+let selectedRoom = "";
+let selectedPrice = 0;
+
+function checkAvailability(){
+let inDate = document.getElementById("checkin").value;
+let outDate = document.getElementById("checkout").value;
+
+if(!inDate || !outDate){
+alert("Select check-in and check-out dates");
+return;
+}
+
+alert("Rooms available for selected dates ✔");
+}
+
+function openModal(room, price){
+selectedRoom = room;
+selectedPrice = price;
+
+document.getElementById("roomName").innerText = "Book: " + room;
+
+document.getElementById("modal").style.display = "flex";
+document.getElementById("total").innerText = "Price: $" + price + " / night";
+}
+
+function confirmBooking(){
+let name = document.getElementById("name").value;
+let email = document.getElementById("email").value;
+
+if(!name || !email){
+alert("Fill all fields");
+return;
+}
+
+let booking = {
+room: selectedRoom,
+price: selectedPrice,
+name: name,
+email: email,
+date: new Date().toLocaleString()
+};
+
+localStorage.setItem("lastBooking", JSON.stringify(booking));
+
+alert("Booking confirmed! ✔");
+
+document.getElementById("modal").style.display = "none";
+}
+</script>
 
 </body>
 </html>
